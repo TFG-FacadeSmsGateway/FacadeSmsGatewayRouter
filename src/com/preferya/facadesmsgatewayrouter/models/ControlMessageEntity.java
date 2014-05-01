@@ -25,9 +25,8 @@ public class ControlMessageEntity implements Serializable, IMessageEntity {
         this.action = items[0];
     }
     
-    public ControlMessageEntity(String[] items) {
-        this.action = items[0];
-        this.args = items[1];
+    public ControlMessageEntity(String item) {
+        this.action = item;
     }
     
     public ControlMessageEntity(String action, String args) {
