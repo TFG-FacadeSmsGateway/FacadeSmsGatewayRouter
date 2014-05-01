@@ -1,0 +1,5 @@
+CREATE TABLE preferya.smssended(
+COST DOUBLE,
+MONTH TEXT,
+YEAR TEXT
+);

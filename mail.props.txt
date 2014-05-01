@@ -1,0 +1,3 @@
+app.servidorCorreo=smtp.gmail.com
+app.correoOrigen=
+app.correoDestino=
