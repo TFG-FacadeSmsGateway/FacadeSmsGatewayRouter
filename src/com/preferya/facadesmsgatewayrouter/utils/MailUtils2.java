@@ -35,7 +35,7 @@ public class MailUtils2 {
         this.session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication("preferyacom","mhnT3PeG6FzZRz"); //TODO: Rellenar solo el usuario y la contraseña de gmail (preferible)
+                                return new PasswordAuthentication("",""); //TODO: Rellenar solo el usuario y la contraseña de gmail (preferible)
                         }
                 });
     }
