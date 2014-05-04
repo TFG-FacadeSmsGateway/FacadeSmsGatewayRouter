@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package com.preferya.facadesmsgatewayrouter.utils;
+package com.preferya.facadesmsgatewatrouter.providers;
 
+import com.preferya.facadesmsgatewayrouter.utils.MailUtils2;
+import com.preferya.facadesmsgatewayrouter.utils.TokenUtil;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

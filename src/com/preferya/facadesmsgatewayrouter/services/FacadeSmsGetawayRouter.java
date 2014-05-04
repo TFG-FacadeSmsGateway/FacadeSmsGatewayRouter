@@ -9,8 +9,8 @@ package com.preferya.facadesmsgatewayrouter.services;
 import com.preferya.facadesmsgatewayrouter.models.ControlMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.DataMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.IMessageEntity;
-import com.preferya.facadesmsgatewayrouter.utils.IProvider;
-import com.preferya.facadesmsgatewayrouter.utils.InfoSmsProvider;
+import com.preferya.facadesmsgatewatrouter.providers.IProvider;
+import com.preferya.facadesmsgatewatrouter.providers.InfoSmsProvider;
 import com.preferya.facadesmsgatewayrouter.utils.RabbitMQUtils;
 import com.preferya.facadesmsgatewayrouter.persists.*;
 import java.io.IOException;
@@ -58,12 +58,16 @@ public class FacadeSmsGetawayRouter {
             //Read a message from queue
             String _message = _queue.reciveMessage();
             System.out.println(_message); //Borrar
-            //IMessageEntity _messageEntity = splitMessage(_message);
+            IMessageEntity _messageEntity = splitMessage(_message);
             
-            //if(_messageEntity instanceof ControlMessageEntity) { //Control Mssg case
-                //if (_messageEntity.getAction().equalsIgnoreCase("stop")) { //stop case
-                    //_stop = true;
-                    //System.out.println("STOP!");
+            if(_messageEntity instanceof ControlMessageEntity) { //Control Mssg case
+                if (_messageEntity.getAction().equalsIgnoreCase("stop")) { //stop case
+                    _stop = true;
+                    System.out.println("STOP!");
+                } else if(_messageEntity.getAction().equalsIgnoreCase("add_country")){
+                    System.out.println("add_country");
+                    //No hacer nada mas aqui
+                }
                 /*}else if (_messageEntity.getAction().equalsIgnoreCase("add_provider")) { //add case
                     if(!existProvider(_messageEntity, _providers)){
                         String[] _splits = _messageEntity.getArgs().split(",");
@@ -81,7 +85,7 @@ public class FacadeSmsGetawayRouter {
                         System.out.println("PROVIDER DOES NOT EXISTS");
                     }
                 }*/
-            //}else {
+            }else {
                 //TODO: Choose destination acording to routing table
                 //System.out.println("Mensaje");
                 
@@ -96,9 +100,9 @@ public class FacadeSmsGetawayRouter {
                     _provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
                     _persistence.updateCost(_cost);
                 }*/
-                
-            //}
-            _stop = true; //Borrar
+                System.out.println(_message.toString());
+            }
+            //_stop = true; //Borrar
         }
         
         _queue.closeConnection();
@@ -122,10 +126,14 @@ public class FacadeSmsGetawayRouter {
         IMessageEntity _ret;
         String[] _splits = _message.split(",");
         
-        if(_splits.length == 1) {
-            _ret = new ControlMessageEntity(_splits[0]); //Constructor for stop case
-        }else if(_splits.length == 2) {
-            _ret = new ControlMessageEntity(_splits[0]); //add or remove case
+        if(_splits[0].equalsIgnoreCase("stop")) {
+            _ret = new ControlMessageEntity(_splits); //Constructor for stop case
+        }else if(_splits[0].equalsIgnoreCase("add_country")){
+            _ret = new ControlMessageEntity(_splits);
+        }else if(_splits[0].equalsIgnoreCase("add_provider")){
+            _ret = new ControlMessageEntity(_splits);
+        }else if(_splits[0].equalsIgnoreCase("remove_provider")){
+            _ret = new ControlMessageEntity(_splits);
         }else {
             _ret = new DataMessageEntity(_splits);
         }
