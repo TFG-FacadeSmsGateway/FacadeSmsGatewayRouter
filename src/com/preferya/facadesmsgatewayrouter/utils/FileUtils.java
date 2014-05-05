@@ -9,6 +9,7 @@ package com.preferya.facadesmsgatewayrouter.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,9 +32,9 @@ public class FileUtils {
             e.printStackTrace();
         }finally{
             try{
-                if(null != this.fr){
+                /*if(null != this.fr){
                     this.fr.close();
-                }
+                }*/
             }catch(Exception e2){
                 e2.printStackTrace();
             }
@@ -41,15 +42,20 @@ public class FileUtils {
     }
     
     public Map<String, String> getMapProviderPropSettings() {
-        Map<String, String> _ret = new HashMap<String, String>();
-        
-        String _linea;
-        while((_linea=this.br.readLine()) != null){
-            String[] _splits = _linea.split("=");
-            _ret.put(_splits[0], _splits[1]);
+        try{
+            Map<String, String> _ret = new HashMap<String, String>();
+
+            String _linea;
+            while((_linea=this.br.readLine()) != null){
+                String[] _splits = _linea.split("=");
+                _ret.put(_splits[0], _splits[1]);
+            }
+
+            return _ret;
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        
-        return _ret;
+        return null;
     }
     
     

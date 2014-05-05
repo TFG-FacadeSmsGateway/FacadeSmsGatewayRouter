@@ -7,7 +7,7 @@
 package com.preferya.facadesmsgatewayrouter.tests;
 
 import com.preferya.facadesmsgatewayrouter.utils.MailUtils;
-import com.preferya.facadesmsgatewayrouter.utils.MailUtils2;
+import com.preferya.facadesmsgatewayrouter.utils.MailUtils;
 import com.preferya.facadesmsgatewayrouter.utils.TokenUtil;
 import java.sql.Timestamp;
 
@@ -23,7 +23,7 @@ public class TestMail {
     private static final String PASS = "5468868";
     
     public static void main(String[] args) {
-        MailUtils2 mail = new MailUtils2();
+        MailUtils mail = new MailUtils();
         
         java.util.Date _date= new java.util.Date();
 	//Timestamp _ts = new Timestamp(_date.getTime());
@@ -38,7 +38,7 @@ public class TestMail {
                 + "#destinos " + "+" + "34661155992" + "#"; //Cuidado con el "+"!!
         
         //System.out.println(_message);
-        mail.sendMessage("sms@mx.infoe.es","Código de Verificación", _message);
+        mail.sendMessage("sms@mx.infoe.es", _message);
         //mail.sendMessage("sergiorodriguezcalvo@gmail.com","Código de Verificación", _message);
         
         //System.out.println(IDSMS + _ref + PASS);

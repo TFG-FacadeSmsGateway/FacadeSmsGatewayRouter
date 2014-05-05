@@ -6,12 +6,15 @@
 
 package com.preferya.facadesmsgatewayrouter.utils;
 
-import java.io.FileInputStream;
+import java.util.Map;
 import java.util.Properties;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -19,98 +22,60 @@ import javax.activation.*;
  */
 public class MailUtils {
     
-    private final static String CONFIG_FILE = "mail.props.txt";
-    private String sServidorCorreo;
-    private String sCorreoOrigen;
-    private String[] asCorreoDestino;
+    private Session session;
     
-    public MailUtils() {
-         this.init();
+    private String smtpHost;
+    private String socketPort;
+    private String port;
+    private String auth;
+    
+    private String from;
+    private String subject;
+    
+    public MailUtils(){
+        
+        FileUtils fu = new FileUtils("mailprops.txt");
+        Map<String, String> mapSetting = fu.getMapProviderPropSettings();
+        
+        this.smtpHost = mapSetting.get("smtphost");
+        this.socketPort = mapSetting.get("socketport");
+        this.port = mapSetting.get("port");
+        this.auth = mapSetting.get("auth");
+        this.from = mapSetting.get("from");
+        this.subject = mapSetting.get("subject");
+        
+        Properties props = new Properties();
+        props.put("mail.smtp.host", this.smtpHost);
+        props.put("mail.smtp.socketFactory.port", this.socketPort);
+        props.put("mail.smtp.socketFactory.class",
+                        "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", this.auth);
+        props.put("mail.smtp.port", this.port);
+
+        this.session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication("",""); //TODO: Rellenar solo el usuario y la contraseña de gmail (preferible)
+                        }
+                });
     }
     
-    /**
-     * Método para inicializar los valores del seridor de correo,
-     * se cargan desde un fichero de configuración con los siguientes valores:
-     * app.servidorCorreo=smtp.xxxx
-     * app.correoOrigen=origenxxx@xxx.com
-     * app.correoDestino=dst1@xxx.com,dst2@xxx.com,...,dstn@xxx.com
-     */
-    private void init () {
+    public void sendMessage(String mailTo, String text){
         try {
-            Properties props = new Properties();
-            props.load( new FileInputStream( CONFIG_FILE ) );
+                Message _message = new MimeMessage(this.session);
+                _message.setFrom(new InternetAddress("")); //TODO: rellenar con vuestra cuenta, preferible gmail.
+                _message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse(mailTo));
+                _message.setSubject(subject);
+                _message.setText(text);
 
-            sServidorCorreo = props.getProperty( "app.servidorCorreo" );
-            sCorreoOrigen = props.getProperty( "app.correoOrigen" );
-            String sTmp = props.getProperty( "app.correoDestino" );
-            String[] asTmp = null;
-            if( sTmp.indexOf( "," ) != 1 ) {
-                asTmp = sTmp.split( "," );
-            }
-            else
-            {
-                asTmp = new String[1];
-                asTmp[0] = sTmp;
-            }
-            asCorreoDestino = asTmp;
-        }
-        catch( Exception ex )
-        {
-            System.out.println( "No hay información de arranque!!" );
-            System.exit( -2 );
-        }
+                Transport.send(_message);
 
+                System.out.println("Done");
+
+        } catch (MessagingException e) {
+                throw new RuntimeException(e);
+        }
     }
     
-    /**
-     * Método público y estático que envía un correo a las direcciones
-     * indicadas en el fichero de propiedades, desde la dirección indicada
-     * también en el mismo fichero con el asunto y el contenido que se pasan
-     * como parámetros.
-     * 
-     * @param sAsunto String
-     * @param sTexto String
-     * @return boolean
-     */
-    public boolean enviarEmail( String sAsunto, String sTexto )
-    {
-        try {
-            Properties props = new Properties();
-            props.put("mail.smtp.host", sServidorCorreo );
-            Session mailSesion = Session.getDefaultInstance(props, null);
-
-            Message msg = new MimeMessage(mailSesion);
-
-            msg.setFrom (new InternetAddress(sCorreoOrigen));
-            msg.setSubject (sAsunto);
-            msg.setSentDate (new java.util.Date());
-            msg.setText (sTexto);
-
-            InternetAddress address[] = new InternetAddress[asCorreoDestino.length];
-            for(int i = 0; i != asCorreoDestino.length; i++) {
-                address[i] = new InternetAddress (asCorreoDestino[i]);
-            }         
-
-            msg.setRecipients (Message.RecipientType.TO, address);
-
-        // Modificación para envío de adjuntos
-
-            /*Multipart m = new MimeMultipart();
-            MimeBodyPart mb = new MimeBodyPart();
-            mb.attachFile(archivo);
-            m.addBodyPart(mb);
-            msg.setContent(m);*/
-
-        // Fin modificación
-
-            Transport.send(msg);
-          }
-          catch( MessagingException e )
-          {
-              return false ;
-          }
-
-          return true ;
-      }
-
 }

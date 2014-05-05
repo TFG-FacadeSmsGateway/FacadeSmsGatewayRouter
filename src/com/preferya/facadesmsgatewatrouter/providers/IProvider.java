@@ -12,11 +12,9 @@ package com.preferya.facadesmsgatewatrouter.providers;
  */
 public interface IProvider {
     
-    public double getCostByMessage();
+    public void turnOffProvider();
     
-    public int numMessageSendedActualMonth();
-    
-    public int getTimeSleepBetweenMessages();
+    public int getNumIntentRemaining();
     
     public void sendMessage(String phone, String code, String iso_lang);
     
