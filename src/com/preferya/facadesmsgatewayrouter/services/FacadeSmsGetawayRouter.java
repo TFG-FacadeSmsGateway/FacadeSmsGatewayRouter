@@ -23,8 +23,7 @@ import java.util.List;
  * @author Sergio
  */
 public class FacadeSmsGetawayRouter {
-    
-    public static final Double MAXMONTH = 10.0;
+    //TODO: cambiar los println por un sistema de log
     
     public static void main(String[] args) throws IOException, InterruptedException, SQLException{
         
@@ -77,22 +76,13 @@ public class FacadeSmsGetawayRouter {
                 }
             }else {
                 //TODO: Choose destination acording to routing table
-                //System.out.println("Mensaje");
+                System.out.println("Mensaje");
                 
                 //TODO: Send sms using Provider
-                //IProvider _provider = new InfoSmsProvider(); //TODO: choose correct provider by parameters
-                //Integer _numIntents = 0;
-                /*double _expense = MAXMONTH - _persistence.getCurrentCost();
-                double _cost = _provider.getCostByMessage();
-                _expense = _expense - _cost;
-                Boolean _st1 = _expense >= 0;
-                if(_st1) {
-                    _provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
-                    _persistence.updateCost(_cost);
-                }*/
+                IProvider _provider = getNextProvider(_providers); //TODO: elegir el que mas intentos tenga
+                _provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
                 System.out.println(_message.toString());
             }
-            //_stop = true; //Borrar
         }
         
         _queue.closeConnection();
@@ -151,6 +141,18 @@ public class FacadeSmsGetawayRouter {
                 _providers.remove(_item);
             }
         }
+    }
+
+    private static IProvider getNextProvider(List<IProvider> _providers) {
+        IProvider _ret = new InfoSmsProvider();//Por defecto
+        
+        for(IProvider item:_providers){
+            if(_ret.getNumIntentRemaining() < item.getNumIntentRemaining()){
+                _ret = item;
+            }
+        }
+        
+        return _ret;
     }
  
 }
