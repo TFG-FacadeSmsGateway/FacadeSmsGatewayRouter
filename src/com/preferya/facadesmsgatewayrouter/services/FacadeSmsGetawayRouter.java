@@ -30,27 +30,16 @@ public class FacadeSmsGetawayRouter {
         
         String _country_iso_code = args[0];
         
-        String[] _modules;
+        List<IProvider> _providers = new LinkedList<IProvider>();
         
         if (args.length > 1) {
-            //TODO: obtener los proveedores
-            
-            //= new String[args.length-1];
             //Copy modules from args
-            //for(int _index = 1; _index < _modules.length; _index++){
-            //    _modules[_index] = args[_index];
-            //}
+            for(int _index = 1; _index < args.length; _index++){
+                _providers.add(getProvider(args[_index]));
+            }
         }
         
         RabbitMQUtils _queue = new RabbitMQUtils(_country_iso_code);
-        
-        List<IProvider> _providers = new LinkedList<IProvider>();
-        //TODO: cargar los proveedores
-        //for(String module : _modules) {
-        //    IProvider _provider;
-        //    _provider = getProvider(module);
-        //    _providers.add(_provider);
-        //}
         
         boolean _stop = false;
         
@@ -67,11 +56,12 @@ public class FacadeSmsGetawayRouter {
                 } else if(_messageEntity.getAction().equalsIgnoreCase("add_country")){
                     System.out.println("add_country");
                     //No hacer nada mas aqui
-                }
-                /*}else if (_messageEntity.getAction().equalsIgnoreCase("add_provider")) { //add case
+                }else if (_messageEntity.getAction().equalsIgnoreCase("add_provider")) { //add case
+                    System.out.println("ADD_PROVIDER");
                     if(!existProvider(_messageEntity, _providers)){
                         String[] _splits = _messageEntity.getArgs().split(",");
-                        _providers.add(getProvider(_splits[1]));
+                        //_providers.add(getProvider(_splits[1])); Borrar
+                        //TODO: levantar desde class path
                         System.out.println("ADD_PROVIDER");
                     }else {
                         System.out.println("PROVIDER HAS ALREADY BEEN ADDED.");
@@ -84,7 +74,7 @@ public class FacadeSmsGetawayRouter {
                     }else {
                         System.out.println("PROVIDER DOES NOT EXISTS");
                     }
-                }*/
+                }
             }else {
                 //TODO: Choose destination acording to routing table
                 //System.out.println("Mensaje");
@@ -109,8 +99,7 @@ public class FacadeSmsGetawayRouter {
         
         System.out.println("Todo correcto!");
     }
-      
-/*    
+       
     private static IProvider getProvider(String module) {
         IProvider _ret = null;
         
@@ -120,7 +109,6 @@ public class FacadeSmsGetawayRouter {
         
         return _ret;
     }
-*/
 
     private static IMessageEntity splitMessage(String _message) {
         IMessageEntity _ret;
@@ -140,7 +128,7 @@ public class FacadeSmsGetawayRouter {
         
         return _ret;
     }
- /*
+ 
     private static boolean existProvider(IMessageEntity _messageEntity, List<IProvider> _providers) {
         boolean _ret = false;
         String _args = _messageEntity.getArgs();
@@ -164,6 +152,6 @@ public class FacadeSmsGetawayRouter {
             }
         }
     }
-  */  
+ 
 }
 

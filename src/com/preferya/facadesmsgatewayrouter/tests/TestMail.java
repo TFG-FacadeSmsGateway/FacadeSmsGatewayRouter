@@ -6,8 +6,8 @@
 
 package com.preferya.facadesmsgatewayrouter.tests;
 
-import com.preferya.facadesmsgatewayrouter.utils.MailUtils;
-import com.preferya.facadesmsgatewayrouter.utils.MailUtils;
+import com.preferya.facadesmsgatewayrouter.utils.MailsUtils;
+import com.preferya.facadesmsgatewayrouter.utils.MailsUtils;
 import com.preferya.facadesmsgatewayrouter.utils.TokenUtil;
 import java.sql.Timestamp;
 
@@ -23,7 +23,7 @@ public class TestMail {
     private static final String PASS = "5468868";
     
     public static void main(String[] args) {
-        MailUtils mail = new MailUtils();
+        MailsUtils mail = new MailsUtils();
         
         java.util.Date _date= new java.util.Date();
 	//Timestamp _ts = new Timestamp(_date.getTime());

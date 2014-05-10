@@ -7,6 +7,7 @@
 package com.preferya.facadesmsgatewayrouter.tests;
 
 import com.preferya.facadesmsgatewatrouter.providers.InfoSmsProvider;
+import com.preferya.facadesmsgatewayrouter.utils.MailsUtils;
 
 /**
  *
@@ -15,8 +16,10 @@ import com.preferya.facadesmsgatewatrouter.providers.InfoSmsProvider;
 public class TestFileUtils {
     
     public static void main(String[] args){
-        InfoSmsProvider _provider = new InfoSmsProvider();
-        System.out.println(_provider.toString());
+        //InfoSmsProvider _provider = new InfoSmsProvider();
+        //System.out.println(_provider.toString());
+        
+        MailsUtils m = new MailsUtils();
     }
     
 }

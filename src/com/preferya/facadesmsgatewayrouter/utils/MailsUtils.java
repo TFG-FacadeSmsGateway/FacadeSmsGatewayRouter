@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
  *
  * @author Sergio
  */
-public class MailUtils {
+public class MailsUtils {
     
     private Session session;
     
@@ -32,9 +32,9 @@ public class MailUtils {
     private String from;
     private String subject;
     
-    public MailUtils(){
+    public MailsUtils(){
         
-        FileUtils fu = new FileUtils("mailprops.txt");
+        FileReadUtils fu = new FileReadUtils("mailprops.txt");
         Map<String, String> mapSetting = fu.getMapProviderPropSettings();
         
         this.smtpHost = mapSetting.get("smtphost");

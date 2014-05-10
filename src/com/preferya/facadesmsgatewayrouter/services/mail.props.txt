@@ -1,3 +1,0 @@
-app.servidorCorreo=smtp.gmail.com
-app.correoOrigen=sergiorodriguezcalvo@gmail.com
-app.correoDestino=sergiorodriguezcalvo@gmail.com

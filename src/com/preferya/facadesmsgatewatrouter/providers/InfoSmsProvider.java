@@ -6,12 +6,15 @@
 
 package com.preferya.facadesmsgatewatrouter.providers;
 
-import com.preferya.facadesmsgatewayrouter.utils.FileUtils;
-import com.preferya.facadesmsgatewayrouter.utils.MailUtils;
+import com.preferya.facadesmsgatewayrouter.utils.FileDeleteUtils;
+import com.preferya.facadesmsgatewayrouter.utils.FileReadUtils;
+import com.preferya.facadesmsgatewayrouter.utils.FileWriteUtils;
+import com.preferya.facadesmsgatewayrouter.utils.MailsUtils;
 import com.preferya.facadesmsgatewayrouter.utils.TokenUtil;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -28,16 +31,16 @@ public class InfoSmsProvider implements IProvider{
     private String saldo;
     private String iva;
     
-    private MailUtils mailService;
+    private MailsUtils mailService;
     //private Properties repository;
     
     private int numIntentRemaining;
     
     public InfoSmsProvider() {
-        this.mailService = new MailUtils();
+        this.mailService = new MailsUtils();
         //this.repository = new Properties();
         
-        FileUtils fu = new FileUtils("InfoSmsProvider.txt");
+        FileReadUtils fu = new FileReadUtils("InfoSmsProvider.txt");
         Map<String, String> mapSetting = fu.getMapProviderPropSettings();
         
         this.currency = mapSetting.get("currency");
@@ -52,6 +55,8 @@ public class InfoSmsProvider implements IProvider{
         Double _costBySms = Double.valueOf(this.costBySms);
         double aux = 1.0; //Para multiplicar por 1'21.
         this.numIntentRemaining = (int)(_saldo/(_costBySms*(aux+_iva)));
+        
+        fu.closeFile();
     }
 
     @Override
@@ -67,18 +72,29 @@ public class InfoSmsProvider implements IProvider{
                 + "#texto Bienvenido a Preferya!, su código de validación es " + code + "#\n"
                 + "#destinos " + "+" + phone + "#"; //Cuidado con el "+"!!
         this.mailService.sendMessage("sms@mx.infoe.es", _message);
-    }
-
-    private String getActualMonth() {
-        Calendar fecha = new GregorianCalendar();
-        return String.valueOf(fecha.get(Calendar.MONTH))+String.valueOf(fecha.get(Calendar.YEAR));
-        
+        this.numIntentRemaining--;
     }
 
     @Override
     public void turnOffProvider() {
         //TODO: actualizar fichero con el saldo restante segun el numero de intentos.
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<String, String> mapSetting = new HashMap<String, String>();
+        
+        mapSetting.put("currency", this.currency);
+        mapSetting.put("costbysms", this.costBySms);
+        mapSetting.put("idsms", this.idsms);
+        mapSetting.put("pass", this.pass);
+        mapSetting.put("saldo", this.saldo);
+        mapSetting.put("iva", this.iva);
+        
+        FileDeleteUtils fd = new FileDeleteUtils("InfoSmsProvider.txt");
+        fd.deleteFile();
+        fd.closeFile();
+        
+        FileWriteUtils fw = new FileWriteUtils("InfoSmsProvider.txt");
+        fw.writeFile(mapSetting);
+        fw.closeFile();
+        
     }
 
     @Override
