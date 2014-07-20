@@ -8,6 +8,7 @@ package com.preferya.facadesmsgatewayrouter.utils;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,12 +17,12 @@ import java.util.Map;
  */
 public class FileWriteUtils {
     
-    private FileWriter fw;
+    //private FileWriter fw;
     private PrintWriter pw;
     
     public FileWriteUtils(String filename){
         try{
-            this.fw = new FileWriter(filename);
+            //this.fw = new FileWriter(filename);
             this.pw = new PrintWriter(filename);
         }catch(Exception e){
             e.printStackTrace();
@@ -29,12 +30,21 @@ public class FileWriteUtils {
     }
     
     public void writeFile(Map<String,String> mapFile){
-        
+        try{
+
+            for(String key : mapFile.keySet()){
+                String linea = key + "=" + mapFile.get(key);
+                pw.println(linea);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     
     public void closeFile(){
         try{
-            this.fw.close();
+            this.pw.close();
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -97,6 +97,11 @@ public class FacadeSmsGetawayRouter {
             _ret = new InfoSmsProvider();
         }
         
+        if(_ret == null){
+            throw new NullPointerException();
+            //TODO: log del problema cuando este montado el sistema de log
+        }
+        
         return _ret;
     }
 
