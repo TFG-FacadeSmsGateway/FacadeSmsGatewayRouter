@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.preferya.facadesmsgatewatrouter.providers;
+package com.preferya.facadesmsgatewayrouter.providers;
 
 /**
  *

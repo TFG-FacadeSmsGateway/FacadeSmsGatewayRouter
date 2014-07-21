@@ -9,10 +9,10 @@ package com.preferya.facadesmsgatewayrouter.services;
 import com.preferya.facadesmsgatewayrouter.models.ControlMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.DataMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.IMessageEntity;
-import com.preferya.facadesmsgatewatrouter.providers.IProvider;
-import com.preferya.facadesmsgatewatrouter.providers.InfoSmsProvider;
+import com.preferya.facadesmsgatewayrouter.providers.IProvider;
+import com.preferya.facadesmsgatewayrouter.providers.InfoSmsProvider;
+import com.preferya.facadesmsgatewayrouter.providers.TwilioProvider;
 import com.preferya.facadesmsgatewayrouter.utils.RabbitMQUtils;
-import com.preferya.facadesmsgatewayrouter.persists.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -27,7 +27,7 @@ public class FacadeSmsGetawayRouter {
     
     public static void main(String[] args) throws IOException, InterruptedException, SQLException{
         
-        String _country_iso_code = args[0];
+        /*String _country_iso_code = args[0];
         
         List<IProvider> _providers = new LinkedList<IProvider>();
         
@@ -38,7 +38,13 @@ public class FacadeSmsGetawayRouter {
             }
         }
         
-        RabbitMQUtils _queue = new RabbitMQUtils(_country_iso_code);
+        RabbitMQUtils _queue = new RabbitMQUtils(_country_iso_code);*/
+        
+        List<IProvider> _providers = new LinkedList<IProvider>();
+        
+        _providers.add(getProvider("InfoSmsProvider"));
+        
+        RabbitMQUtils _queue = new RabbitMQUtils("es_es");
         
         boolean _stop = false;
         
@@ -80,7 +86,7 @@ public class FacadeSmsGetawayRouter {
                 
                 //TODO: Send sms using Provider
                 IProvider _provider = getNextProvider(_providers); //TODO: elegir el que mas intentos tenga
-                _provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
+                //_provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
                 System.out.println(_message.toString());
             }
         }
@@ -95,6 +101,8 @@ public class FacadeSmsGetawayRouter {
         
         if(module.equalsIgnoreCase("InfoSmsProvider")){
             _ret = new InfoSmsProvider();
+        }else if(module.equalsIgnoreCase("TwilioProvider")){
+            _ret = new TwilioProvider();
         }
         
         if(_ret == null){
@@ -129,7 +137,7 @@ public class FacadeSmsGetawayRouter {
         String _args = _messageEntity.getArgs();
         
         String[] splits = _args.split(",");
-        String _provider = splits[1];
+        String _provider = splits[0];
         
         for(IProvider _item:_providers) {
             if(_item.getClass().getCanonicalName().equalsIgnoreCase(_provider)){

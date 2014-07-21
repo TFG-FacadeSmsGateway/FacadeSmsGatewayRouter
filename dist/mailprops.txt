@@ -1,6 +1,0 @@
-smtphost=smtp.gmail.com
-socketport=456
-port=456
-auth=true
-from=prueba@gmail.com
-subject=Codigo de verificacion

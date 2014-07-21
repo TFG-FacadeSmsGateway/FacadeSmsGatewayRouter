@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.preferya.facadesmsgatewatrouter.providers;
+package com.preferya.facadesmsgatewayrouter.providers;
 
 import com.preferya.facadesmsgatewayrouter.utils.FileDeleteUtils;
 import com.preferya.facadesmsgatewayrouter.utils.FileReadUtils;

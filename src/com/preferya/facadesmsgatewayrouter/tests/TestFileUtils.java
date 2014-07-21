@@ -6,7 +6,7 @@
 
 package com.preferya.facadesmsgatewayrouter.tests;
 
-import com.preferya.facadesmsgatewatrouter.providers.InfoSmsProvider;
+import com.preferya.facadesmsgatewayrouter.providers.InfoSmsProvider;
 import com.preferya.facadesmsgatewayrouter.utils.MailsUtils;
 
 /**
