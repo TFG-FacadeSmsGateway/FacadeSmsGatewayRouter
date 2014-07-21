@@ -1,0 +1,7 @@
+accountSID=00001
+authToken=1111
+defaultPhone=+34111111111
+currency=€
+costbysms=0.11
+iva=0.21
+saldo=10.0

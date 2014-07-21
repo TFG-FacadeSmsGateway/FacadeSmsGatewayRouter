@@ -34,8 +34,6 @@ public class TwilioProvider implements IProvider {
     
     private String currency;
     private String costBySms;
-    private String idsms;
-    private String pass;
     private String saldo;
     private String iva;
     
@@ -53,8 +51,6 @@ public class TwilioProvider implements IProvider {
         
         this.currency = mapSetting.get("currency");
         this.costBySms = mapSetting.get("costbysms");
-        this.idsms = mapSetting.get("idsms");
-        this.pass = mapSetting.get("pass");
         this.saldo = mapSetting.get("saldo");
         this.iva = mapSetting.get("iva");
         
@@ -78,8 +74,6 @@ public class TwilioProvider implements IProvider {
         
         mapSetting.put("currency", this.currency);
         mapSetting.put("costbysms", this.costBySms);
-        mapSetting.put("idsms", this.idsms);
-        mapSetting.put("pass", this.pass);
         mapSetting.put("saldo", this.saldo);
         mapSetting.put("iva", this.iva);
         
@@ -119,6 +113,11 @@ public class TwilioProvider implements IProvider {
             Logger.getLogger(TwilioProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    public String toString(){
+        return this.accountSID + "-" + this.authToken + "-" + this.defaultPhone
+                + "-" + this.costBySms + "-" + String.valueOf(this.numIntentRemaining);
     }
     
 }
