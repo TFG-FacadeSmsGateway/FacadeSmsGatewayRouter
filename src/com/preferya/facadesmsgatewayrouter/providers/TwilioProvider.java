@@ -37,9 +37,13 @@ public class TwilioProvider implements IProvider {
     private String saldo;
     private String iva;
     
+    private TwilioRestClient client;
+    
     private int numIntentRemaining;
     
     public TwilioProvider() {
+        
+        this.client = new TwilioRestClient(this.accountSID, this.authToken);
         
         FileReadUtils fu = new FileReadUtils("TwilioProvider.txt");
         Map<String, String> mapSetting = fu.getMapProviderPropSettings();
@@ -93,7 +97,6 @@ public class TwilioProvider implements IProvider {
 
     @Override
     public void sendMessage(String phone, String code, String iso_lang) {
-        TwilioRestClient client = new TwilioRestClient(this.accountSID, this.authToken);
  
         // Build a filter for the MessageList
         List<NameValuePair> params = new ArrayList<NameValuePair>();

@@ -25,9 +25,9 @@ import java.util.List;
 public class FacadeSmsGetawayRouter {
     //TODO: cambiar los println por un sistema de log
     
-    public static void main(String[] args) throws IOException, InterruptedException, SQLException{
+    public static void main(String[] args) throws IOException, InterruptedException{
         
-        /*String _country_iso_code = args[0];
+        String _country_iso_code = args[0];
         
         List<IProvider> _providers = new LinkedList<IProvider>();
         
@@ -38,13 +38,13 @@ public class FacadeSmsGetawayRouter {
             }
         }
         
-        RabbitMQUtils _queue = new RabbitMQUtils(_country_iso_code);*/
+        RabbitMQUtils _queue = new RabbitMQUtils(_country_iso_code);
         
-        List<IProvider> _providers = new LinkedList<IProvider>();
+        /*List<IProvider> _providers = new LinkedList<IProvider>();
         
         _providers.add(getProvider("InfoSmsProvider"));
         
-        RabbitMQUtils _queue = new RabbitMQUtils("es_es");
+        RabbitMQUtils _queue = new RabbitMQUtils("es_es");*/
         
         boolean _stop = false;
         
@@ -65,8 +65,15 @@ public class FacadeSmsGetawayRouter {
                     System.out.println("ADD_PROVIDER");
                     if(!existProvider(_messageEntity, _providers)){
                         String[] _splits = _messageEntity.getArgs().split(",");
-                        //_providers.add(getProvider(_splits[1])); Borrar
-                        //TODO: levantar desde class path
+                        try{
+                            ClassLoader _classLoader = FacadeSmsGetawayRouter.class.getClassLoader();
+                            Class _providerClass = _classLoader.loadClass("com.preferya.facadesmsgatewayrouter.providers."+_splits[0]);
+                            IProvider _provider = (IProvider) _providerClass.newInstance();
+                            _providers.add(_provider);
+                        }catch(Exception e){
+                            System.out.println("CAN NOT LOAD CLASS FROM CLASSPATH");
+                            e.printStackTrace();
+                        }
                         System.out.println("ADD_PROVIDER");
                     }else {
                         System.out.println("PROVIDER HAS ALREADY BEEN ADDED.");
