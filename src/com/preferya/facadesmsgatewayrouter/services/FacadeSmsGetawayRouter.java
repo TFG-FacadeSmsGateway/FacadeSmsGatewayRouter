@@ -88,13 +88,12 @@ public class FacadeSmsGetawayRouter {
                     }
                 }
             }else {
-                //TODO: Choose destination acording to routing table
-                System.out.println("Mensaje");
+                System.out.println("SEND MESSAGE");
                 
-                //TODO: Send sms using Provider
-                IProvider _provider = getNextProvider(_providers); //TODO: elegir el que mas intentos tenga
-                //_provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
-                System.out.println(_message.toString());
+                //Get next provider with less intents
+                IProvider _provider = getNextProvider(_providers); 
+                _provider.sendMessage(_messageEntity.getPhone(), _messageEntity.getValidationCode(), _messageEntity.getIsoLang());
+                //System.out.println(_message.toString());
             }
         }
         
