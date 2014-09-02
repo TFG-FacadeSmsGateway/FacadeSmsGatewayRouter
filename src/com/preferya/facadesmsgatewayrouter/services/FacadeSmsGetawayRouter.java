@@ -9,6 +9,7 @@ package com.preferya.facadesmsgatewayrouter.services;
 import com.preferya.facadesmsgatewayrouter.models.ControlMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.DataMessageEntity;
 import com.preferya.facadesmsgatewayrouter.models.IMessageEntity;
+import com.preferya.facadesmsgatewayrouter.providers.AndroidSmsProvider;
 import com.preferya.facadesmsgatewayrouter.providers.IProvider;
 import com.preferya.facadesmsgatewayrouter.providers.InfoSmsProvider;
 import com.preferya.facadesmsgatewayrouter.providers.TwilioProvider;
@@ -102,13 +103,15 @@ public class FacadeSmsGetawayRouter {
         System.out.println("Todo correcto!");
     }
        
-    private static IProvider getProvider(String module) {
+    private static IProvider getProvider(String module) throws IOException {
         IProvider _ret = null;
         
         if(module.equalsIgnoreCase("InfoSmsProvider")){
             _ret = new InfoSmsProvider();
         }else if(module.equalsIgnoreCase("TwilioProvider")){
             _ret = new TwilioProvider();
+        }else if(module.equalsIgnoreCase("AndroidSmsProvider")){
+            _ret = new AndroidSmsProvider();
         }
         
         if(_ret == null){
